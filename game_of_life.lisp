@@ -2,11 +2,12 @@
 
 ;; Notes
 ;; Extended language features used
-;; (println datum)         -> Print datum with line break
-;; (string-append str ...) -> Concat strings
-;; (list-ref list pos)     -> Returns the element of list at position pos
-;; (count proc list)       -> Returns the number of elements in the list where procedure proc return true
-;; (string->number str)    -> Convert string to number
+;; (println datum)              -> Print datum with line break
+;; (string-append str ...)      -> Concat strings
+;; (list-ref list pos)          -> Returns the element of list at position pos
+;; (count proc list)            -> Returns the number of elements in the list where procedure proc return true
+;; (string-split str separator) -> Split str by separator into a list of sub-strings
+;; (string->number str)         -> Convert string to number
 
 ;; Print board
 (define print-board

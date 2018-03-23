@@ -17,6 +17,10 @@ Count the number of elements in `list` where procedure `proc` return `true`
 ```
 (count proc list)
 ```
+Split `str` by `separator` into a list of sub-strings
+```
+(string-split str separator)
+```
 Cast `str` to a number
 ```
 (string->number str)

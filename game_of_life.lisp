@@ -12,20 +12,22 @@
 ;; Print board
 (define print-board
   (lambda (board)
-    (cond ((equal? board null) (println ".........."))
-          (else (println (car board)) (print-board (cdr board))))))
+    (cond ((equal? board '()) (println ".........."))
+          (else (do (println (car board)) (print-board (cdr board)))))))
 
 ;; Print board list
 (define print-board-list
   (lambda (name boards)
-    (cond ((equal? boards null) (println (string-append "End of " name)))
-          (else (print-board (car boards)) (print-board-list name (cdr boards))))))
+    (cond ((equal? boards '()) (println (string-append "End of " name)))
+          (else (do (print-board (car boards)) (print-board-list name (cdr boards)))))))
 
 ;; Get value from board by row and column
 (define pos
   (lambda (board i j nrow ncol default)
-    (cond ((< i 0) default) ((> i (- nrow 1)) default)
-          ((< j 0) default) ((> j (- ncol 1)) default)
+    (cond ((< i 0) default)
+          ((> i (- nrow 1)) default)
+          ((< j 0) default)
+          ((> j (- ncol 1)) default)
           (else (list-ref (list-ref board i) j)))))
 
 ;; Check if alive
@@ -37,14 +39,14 @@
 ;; Get 8-cells neighbor
 (define neighbor
   (lambda (board i j nrow ncol)
-    (list (pos board (- i 1) (- j 1) nrow ncol null)
-          (pos board (- i 1) j nrow ncol null)
-          (pos board (- i 1) (+ j 1) nrow ncol null)
-          (pos board i (- j 1) nrow ncol null)
-          (pos board i (+ j 1) nrow ncol null)
-          (pos board (+ i 1) (- j 1) nrow ncol null)
-          (pos board (+ i 1) j nrow ncol null)
-          (pos board (+ i 1) (+ j 1) nrow ncol null))))
+    (list (pos board (- i 1) (- j 1) nrow ncol '())
+          (pos board (- i 1) j nrow ncol '())
+          (pos board (- i 1) (+ j 1) nrow ncol '())
+          (pos board i (- j 1) nrow ncol '())
+          (pos board i (+ j 1) nrow ncol '())
+          (pos board (+ i 1) (- j 1) nrow ncol '())
+          (pos board (+ i 1) j nrow ncol '())
+          (pos board (+ i 1) (+ j 1) nrow ncol '()))))
 
 ;; Check if stay alive by position
 (define stay-alive?
@@ -56,7 +58,7 @@
 (define next-cell-state
   (lambda (board i j nrow ncol)
     (cond
-      ((alive? (pos board i j nrow ncol null))
+      ((alive? (pos board i j nrow ncol '()))
        (cond ((stay-alive? board i j nrow ncol) 1)
              (else 0)))
       (else
@@ -118,21 +120,21 @@
 
 (define find-board
   (lambda (boards name)
-    (cond ((equal? boards null) null)
+    (cond ((equal? boards '()) '())
           ((equal? name (list-ref (car boards) 0)) (list-ref (car boards) 1))
           (else (find-board (cdr boards) name)))))
 
 (define run-on-board
   (lambda (board n)
-    (print-board board)
-    (cond ((equal? board null) (println "Invalid board!"))
-          (else (game-of-life board n (length board) (length (car board)))))))
+    (do (print-board board)
+        (cond ((equal? board '()) (println "Invalid board!"))
+          (else (game-of-life board n (length board) (length (car board))))))))
 
 (define run
   (lambda (expression)
     (print-board-list
-     expression
-     (run-on-board (find-board boards (car (string-split expression "(")))
+         expression
+         (run-on-board (find-board boards (car (string-split expression "(")))
                    (string->number (car (string-split (car (cdr (string-split expression "("))) ")")))))))
 
-(run "beehive(10)")
+(run "beacon(10)")
